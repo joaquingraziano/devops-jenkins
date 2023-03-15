@@ -4,7 +4,7 @@ pipeline {
     stage('build') {
       steps {
         echo 'prueba de echo, lupitamanda'
-        docker build -t test .
+        sh docker build -t test .
       }
     }
 
