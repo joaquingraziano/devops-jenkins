@@ -1,7 +1,7 @@
 pipeline {
   environment {
     registry = "jgraziano/lupitaap"
-    registryCredential = 'dockerhub'
+    registryCredential = 'dockerhub_id'
     dockerImage = ''
   }
   
@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy Image') {
         steps{
           script {
-             withDockerRegistry([ credentialsId: "dockerhub", url: "https://hub.docker.com/r/jgraziano/lupitaap" ]) {
+             withDockerRegistry([ credentialsId: "dockerhub_id", url: "https://hub.docker.com/r/jgraziano/lupitaap" ]) {
                 dockerImage.push()
       }
     }
