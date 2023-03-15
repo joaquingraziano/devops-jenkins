@@ -6,15 +6,26 @@ pipeline {
   
   agent any
   stages {
-    stage('build') {
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/joaquingraziano/devops-jenkins.git'
+      }
+    stage('build image') {
       steps {
         echo 'prueba de echo, lupitamanda'
         script {
           docker.build registry + ":$BUILD_NUMBER"
-        }
-        
+        }  
       }
     }
-
+      stage('Deploy Image') {
+        steps{
+          script {
+             docker.withRegistry( '', registryCredential ) {
+                dockerImage.push()
+      }
+    }
+  }
+}
   }
 }
