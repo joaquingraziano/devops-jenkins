@@ -1,7 +1,7 @@
 pipeline {
   environment {
-    registry = "jgraziano/test"
-    registryCredential = 'dockerhub_id'
+    registry = "jgraziano/lupitaap"
+    registryCredential = 'dockerhub'
   }
   
   agent any
