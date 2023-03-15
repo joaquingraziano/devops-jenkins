@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy Image') {
         steps{
           script {
-             withDockerRegistry([ credentialsId: "dockerhub", url: "https://hub.docker.com/r/jgraziano/lupitaap" ]) {
+             withDockerRegistry([ credentialsId: "dockerhub", url: "jgraziano/lupitaap" ]) {
                 dockerImage.push()
       }
     }
