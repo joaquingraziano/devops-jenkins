@@ -20,7 +20,7 @@ pipeline {
         steps{
           script {
              withDockerRegistry([ credentialsId: "dockerhub", url: "https://registry.hub.docker.com/r/jgraziano/lupitaap" ]) {
-                dockerImage.push()
+                app.push()
       }
     }
   }
