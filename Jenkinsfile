@@ -19,7 +19,7 @@ pipeline {
  stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://hub.docker.com/repository/docker/jgraziano/lupitaap', 'dockerhub_id') {
+                    docker.withRegistry('https://hub.docker.com/repository/docker/jgraziano/lupitaap', 'dockerhub') {
                         app.push()
                     }
                 }
