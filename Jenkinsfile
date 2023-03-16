@@ -33,6 +33,7 @@ pipeline {
     stage('Cleaning Image') {
       steps{
       sh "docker rmi $registry:$BUILD_NUMBER"
+      sh "docker rmi registry.hub.docker.com/$registry:$BUILD_NUMBER"
       }
     }
   }
