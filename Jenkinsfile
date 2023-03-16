@@ -7,17 +7,21 @@ pipeline {
   
   agent any
   stages {
-    
-    stage('build image') {
+    //Inicia Stage Build
+    stage('build') {
       steps {
-        echo 'prueba de echo, lupitamanda'
+        echo 'Haciendo el Build de la app'
         script {
           docker.build registry + ":$BUILD_NUMBER"
         }  
       }
     }
+    //Finaliza Stage Build
+
+    //Inicia Stage Deploy
     stage('deploy') {
       steps {
+        echo 'Haciendo un Push a la registry de docker'
         script {
           docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
           docker.image("jgraziano/lupitaap:$BUILD_NUMBER").push()
@@ -25,6 +29,7 @@ pipeline {
         }
       }
     }
-  }
+    //Finaliza Stage Deploy
 
+  }
 }
