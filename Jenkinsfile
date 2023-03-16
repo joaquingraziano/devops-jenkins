@@ -16,15 +16,10 @@ pipeline {
         }  
       }
     }
-       stage('Deploy Image') {
-        steps{
-          script {
-             withDockerRegistry([ credentialsId: "dockerhub_id", url: "https://registry.hub.docker.com/" ]) {
-                docker.image("jgraziano/lupitaap:$BUILD_NUMBER").push()
-      }
-    }
-  }
-}
+      stage('Push image') {
+        withDockerRegistry([ credentialsId: "dockerhub_id", url: "https://registry.hub.docker.com/" ]) {
+        bat "docker push jgraziano/lupitaap:$BUILD_NUMBER"
+        }
     
   }
 }
