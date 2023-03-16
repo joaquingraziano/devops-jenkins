@@ -16,11 +16,11 @@ pipeline {
         }  
       }
     }
-    stage('Push Docker Image') {
+    stage('deploy') {
       steps {
         script {
           docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
-          docker.image.push("jgraziano/lupitaap:$BUILD_NUMBER")
+          docker.image("jgraziano/lupitaap:$BUILD_NUMBER").push()
           }
         }
       }
