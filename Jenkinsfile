@@ -19,8 +19,8 @@ pipeline {
        stage('Deploy Image') {
         steps{
           script {
-             withDockerRegistry([ credentialsId: "dockerhub", url: "https://registry.hub.docker.com/r/jgraziano/lupitaap" ]) {
-                docker.image("backend:v1").push()
+             withDockerRegistry([ credentialsId: "dockerhub", url: "https://registry.hub.docker.com/" ]) {
+                docker.image("jgraziano/lupitaap:$BUILD_NUMBER").push()
       }
     }
   }
