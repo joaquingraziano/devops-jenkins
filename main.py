@@ -1,3 +1,3 @@
 #!/usr/bin/env python3
 
-print("¡Lupita es Magica y genial!")
+print("¡Lupita manda y es Magica y genial!")
