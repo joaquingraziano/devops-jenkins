@@ -8,7 +8,7 @@ pipeline {
   agent any
   stages {
     //Inicia Stage Build
-    stage('build') {
+    stage('build Image') {
       steps {
         echo 'Haciendo el Build de la app'
         script {
@@ -18,8 +18,8 @@ pipeline {
     }
     //Finaliza Stage Build
 
-    //Inicia Stage Deploy
-    stage('deploy') {
+    //Inicia Stage Push
+    stage('Push Image') {
       steps {
         echo 'Haciendo un Push a la registry de docker'
         script {
@@ -29,7 +29,7 @@ pipeline {
         }
       }
     }
-    //Finaliza Stage Deploy
+    //Finaliza Stage Push
 
   }
 }
