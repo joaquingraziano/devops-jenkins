@@ -4,7 +4,7 @@ pipeline {
     registryCredential = 'dockerhub_id'
     dockerImage = ''
   }
-  
+  ##test
   agent any
   stages {
     
