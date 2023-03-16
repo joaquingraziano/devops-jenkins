@@ -16,15 +16,15 @@ pipeline {
         }  
       }
     }
-       stage('Deploy Image') {
-        steps{
-          script {
-             withDockerRegistry([ credentialsId: "dockerhub_id", url: "https://hub.docker.com/r/jgraziano/lupitaap" ]) {
-                dockerImage.push()
-      }
-    }
-  }
-}
+ stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://hub.docker.com/repository/docker/jgraziano/lupitaap', 'dockerhub_id') {
+                        app.push()
+                    }
+                }
+            }
+        }
     
   }
 }
