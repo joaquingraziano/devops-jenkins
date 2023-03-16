@@ -30,6 +30,8 @@ pipeline {
       }
     }
     //Finaliza Stage Push
-
-  }
+    stage('Cleaning Image') {
+      steps{
+      sh "docker rmi $registry:$BUILD_NUMBER"
+      }
 }
