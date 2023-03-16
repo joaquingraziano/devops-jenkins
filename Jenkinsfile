@@ -20,7 +20,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
-          app.push()
+          app.push("jgraziano/lupitaap:$BUILD_NUMBER")
           }
         }
       }
