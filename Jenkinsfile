@@ -17,7 +17,15 @@ pipeline {
       }
     }
     //Finaliza Stage Build
-
+/*falta probar
+   stage('Test') {
+          steps {
+                // Ejecuta tus pruebas en la imagen Docker construida anteriormente
+                sh 'docker run backend:v1 npm test'
+            }
+          }
+        
+  */
     //Inicia Stage Push
     stage('Push Image') {
       steps {
