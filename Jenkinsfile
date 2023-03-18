@@ -10,6 +10,7 @@ pipeline {
     //Inicia Stage Build
     stage('build Image') {
       steps {
+        sh 'ls'
         echo 'Haciendo el Build de la app'
         script {
           docker.build registry + ":v1.$BUILD_NUMBER"
