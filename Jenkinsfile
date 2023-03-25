@@ -83,5 +83,4 @@ pipeline {
       sh "docker rmi registry.hub.docker.com/$registry:v1.$BUILD_NUMBER"
       }
     }
-  }
-}
+  
