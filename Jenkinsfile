@@ -7,6 +7,44 @@ pipeline {
   
   agent any
   stages {
+    //inicia prueba
+    stage('Clone GitHub repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/joaquingraziano/argocd.git'
+            }
+        }
+        stage('Get latest image version') {
+            steps {
+                script {
+                    def imageName = 'jgraziano/lupitaap'
+                    def version = sh(script: "curl -s https://registry.hub.docker.com/v1/repositories/${imageName}/tags | jq -r '.[].name' | sort -V | tail -n1", returnStdout: true).trim()
+                    env.VERSION = version
+                }
+            }
+        }
+        stage('Update Deployment') {
+            steps {
+                script {
+                    def deploymentFile = 'manifiestos-eks/dev/deployment.yml'
+                    def deploymentContent = readFile(deploymentFile)
+                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:.*', "jgraziano/lupitaap:${env.VERSION}")
+                    writeFile file: deploymentFile, text: updatedDeploymentContent
+                }
+            }
+        }
+        stage('Push changes to GitHub') {
+            steps {
+                gitPush(branch: 'main', credentialsId: 'joaquingraziano', message: 'Actualizar Deployment a la última versión de la imagen', url: 'https://github.com/joaquingraziano/argocd.git')
+            }
+        }
+    }
+}
+
+
+
+
+
+    //finaliza prueba
     //Inicia Stage Build
     stage('build Image') {
       steps {
