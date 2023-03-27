@@ -9,7 +9,7 @@ pipeline {
   stages {
 
     //Inicia Stage Build
-    stage('build Image') {
+/*    stage('build Image') {
       steps {
         sh 'ls'
         echo 'Haciendo el Build de la app'
@@ -31,7 +31,7 @@ pipeline {
         }
       }
     }
-
+*/
     stage('Update Deployment') {
       steps {
         script {
@@ -40,12 +40,13 @@ pipeline {
                     // Cambia el nombre del repo
                     // Update Deployment
                     sh "git clone https://github.com/joaquingraziano/argocd.git"
-                    sh 'chmod u+w Dev/deployment.yml'
-                    def deploymentFile = 'Dev/deployment.yml'
+                    sh "ls -lth"
+                    sh 'chmod u+w argocd/Dev/deployment.yml'
+                    def deploymentFile = 'argocd/Dev/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
                     def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
-                    sh 'cat dev/deployment.yml'
+                    sh 'cat argocd/dev/deployment.yml'
 
                     // Push changes to GitHub
                     withCredentials([gitUsernamePassword(credentialsId: 'git', gitToolName: 'git-tool')]){
