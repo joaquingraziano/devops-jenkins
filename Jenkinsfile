@@ -9,7 +9,7 @@ pipeline {
   stages {
 
     //Inicia Stage Build
-/*    stage('build Image') {
+    stage('build Image') {
       steps {
         sh 'ls'
         echo 'Haciendo el Build de la app'
@@ -31,7 +31,7 @@ pipeline {
         }
       }
     }
-*/
+
     stage('Update Deployment') {
       steps {
         script {
