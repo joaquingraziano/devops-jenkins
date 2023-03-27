@@ -35,22 +35,20 @@ pipeline {
     stage('Update Deployment') {
       steps {
         script {
-                   // Clone GitHub repo
-                    //git branch: 'main', url: 'https://github.com/joaquingraziano/argocd'  
-                    // Cambia el nombre del repo
-                    // Update Deployment
+                    // borra el directorio y lo vuelve a clonar
                     sh "rm argocd -R"
                     sh "git clone https://github.com/joaquingraziano/argocd.git"
-                    
-                    sh 'chmod u+w argocd/Dev/deployment.yml'
-                    def deploymentFile = 'argocd/Dev/deployment.yml'
+                
+                dir('argocd/') {
+                    //modifica version en manifiesto
+                    sh 'chmod u+w Dev/deployment.yml'
+                    def deploymentFile = 'Dev/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
                     def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
-                    sh 'cat argocd/Dev/deployment.yml'
-                    dir('argocd/') {
-                                            
-                    // Push changes to GitHub
+                    sh 'cat Dev/deployment.yml'
+                                     
+                    // Pushea los cambios al repositorio
                     withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
                         sh 'git config --global user.email "jgraziano@example.com"'
                         sh 'git config --global user.name "jgraziano"'
@@ -67,6 +65,7 @@ pipeline {
     }     
     post {
       always {
+        //limpia imagenes
           echo 'Se limpian las imagenes pusheadas'
           sh "docker rmi $registry:v1.$BUILD_NUMBER"
           sh "docker rmi registry.hub.docker.com/$registry:v1.$BUILD_NUMBER"
