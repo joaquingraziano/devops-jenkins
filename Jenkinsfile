@@ -36,7 +36,7 @@ pipeline {
       steps {
         script {
                    // Clone GitHub repo
-                    git branch: 'master', url: 'https://github.com/jgraziano/argocd'  
+                    git branch: 'main', url: 'https://github.com/jgraziano/argocd'  
                     // Cambia el nombre del repo
                     // Update Deployment
                     sh 'chmod u+w dev/deployment.yml'
@@ -47,13 +47,13 @@ pipeline {
                     sh 'cat dev/deployment.yml'
 
                     // Push changes to GitHub
-                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
+                    withCredentials([gitUsernamePassword(credentialsId: 'git', gitToolName: 'git-tool')]){
                         sh 'git config --global user.email "jgraziano@example.com"'
                         sh 'git config --global user.name "jgraziano"'
                         sh 'git status'
                         sh 'git add -v dev/deployment.yml'
                         sh 'git commit -v -m "Update deployment"'
-                        sh 'git push origin master'
+                        sh 'git push origin main'
                     }
                 }
             }
