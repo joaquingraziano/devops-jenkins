@@ -64,9 +64,9 @@ pipeline {
                         sh 'git push origin main'
                     }
                 }
-            }
+            }*/
         }
-    //Finaliza Stage Push*/
+    //Finaliza Stage Push
   }
     }     
     post {
@@ -77,4 +77,3 @@ pipeline {
       }
     }
   }
-}
