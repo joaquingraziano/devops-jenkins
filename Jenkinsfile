@@ -51,7 +51,7 @@ pipeline {
                     dir('argocd/') {
                                             
                     // Push changes to GitHub
-                    withCredentials([gitUsernamePassword(credentialsId: 'git', gitToolName: 'git-tool')]){
+                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
                         sh 'git config --global user.email "jgraziano@example.com"'
                         sh 'git config --global user.name "jgraziano"'
                         sh 'git status'
