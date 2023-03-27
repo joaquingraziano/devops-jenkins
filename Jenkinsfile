@@ -55,7 +55,7 @@ pipeline {
                         sh 'git config --global user.email "jgraziano@example.com"'
                         sh 'git config --global user.name "jgraziano"'
                         sh 'git status'
-                        sh 'git add -v dev/deployment.yml'
+                        sh 'git add -v Dev/deployment.yml'
                         sh 'git commit -v -m "Update deployment"'
                         sh 'git push origin main'
                     }
