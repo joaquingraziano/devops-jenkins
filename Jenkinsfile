@@ -49,12 +49,8 @@ pipeline {
                     writeFile file: deploymentFile, text: updatedDeploymentContent
                     sh 'cat argocd/Dev/deployment.yml'
                     dir('argocd/') {
-                        sh 'git commit -a -m "subocambios"'
-                        sh 'git push'
-                    }            
-                  }
-
-                    /* Push changes to GitHub
+                                            
+                    // Push changes to GitHub
                     withCredentials([gitUsernamePassword(credentialsId: 'git', gitToolName: 'git-tool')]){
                         sh 'git config --global user.email "jgraziano@example.com"'
                         sh 'git config --global user.name "jgraziano"'
@@ -64,7 +60,7 @@ pipeline {
                         sh 'git push origin main'
                     }
                 }
-            }*/
+            }
         }
     //Finaliza Stage Push
   }
