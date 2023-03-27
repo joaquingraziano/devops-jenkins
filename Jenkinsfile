@@ -36,11 +36,12 @@ pipeline {
       steps {
         script {
                    // Clone GitHub repo
-                    git branch: 'main', url: 'https://github.com/joaquingraziano/argocd'  
+                    //git branch: 'main', url: 'https://github.com/joaquingraziano/argocd'  
                     // Cambia el nombre del repo
                     // Update Deployment
-                    sh 'chmod u+w dev/deployment.yml'
-                    def deploymentFile = 'dev/deployment.yml'
+                    sh "git clone https://github.com/joaquingraziano/argocd.git"
+                    sh 'chmod u+w Dev/deployment.yml'
+                    def deploymentFile = 'Dev/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
                     def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
