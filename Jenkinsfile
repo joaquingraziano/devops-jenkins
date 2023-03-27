@@ -36,7 +36,7 @@ pipeline {
       steps {
         script {
                    // Clone GitHub repo
-                    git branch: 'main', url: 'https://github.com/jgraziano/argocd'  
+                    git branch: 'main', url: 'https://github.com/joaquingraziano/argocd'  
                     // Cambia el nombre del repo
                     // Update Deployment
                     sh 'chmod u+w dev/deployment.yml'
