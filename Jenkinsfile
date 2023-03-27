@@ -31,6 +31,33 @@ pipeline {
         }
       }
     }
+
+    stage('Update Deployment') {
+      steps {
+        script {
+                   // Clone GitHub repo
+                    git branch: 'master', url: 'https://github.com/jgraziano/argocd'  
+                    // Cambia el nombre del repo
+                    // Update Deployment
+                    sh 'chmod u+w dev/deployment.yml'
+                    def deploymentFile = 'dev/deployment.yml'
+                    def deploymentContent = readFile(deploymentFile)
+                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
+                    writeFile file: deploymentFile, text: updatedDeploymentContent
+                    sh 'cat dev/deployment.yml'
+
+                    // Push changes to GitHub
+                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
+                        sh 'git config --global user.email "jgraziano@example.com"'
+                        sh 'git config --global user.name "jgraziano"'
+                        sh 'git status'
+                        sh 'git add -v dev/deployment.yml'
+                        sh 'git commit -v -m "Update deployment"'
+                        sh 'git push origin master'
+                    }
+                }
+            }
+        }
     //Finaliza Stage Push
   }     
     post {
