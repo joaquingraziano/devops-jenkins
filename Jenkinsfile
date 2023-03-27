@@ -41,12 +41,13 @@ pipeline {
                     // Update Deployment
                     sh "git clone https://github.com/joaquingraziano/argocd.git"
                     sh "ls -lth"
-                    sh 'chmod u+w argocd/Dev/deployment.yml'
-                    def deploymentFile = 'argocd/Dev/deployment.yml'
+                    sh "cd argocd"
+                    sh 'chmod u+w Dev/deployment.yml'
+                    def deploymentFile = 'Dev/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
                     def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
-                    sh 'cat argocd/dev/deployment.yml'
+                    sh 'cat Dev/deployment.yml'
 
                     // Push changes to GitHub
                     withCredentials([gitUsernamePassword(credentialsId: 'git', gitToolName: 'git-tool')]){
