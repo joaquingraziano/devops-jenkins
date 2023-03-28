@@ -46,8 +46,6 @@ pipeline {
                     def deploymentContent = readFile(deploymentFile)
                     def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
-                    sh 'cat Dev/deployment.yml'
-                                     
                     // Pushea los cambios al repositorio
                     withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
                         sh 'git config --global user.email "jgraziano@example.com"'
