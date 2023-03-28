@@ -41,8 +41,8 @@ pipeline {
                 
                 dir('argocd/') {
                     //modifica version en manifiesto
-                    sh 'chmod u+w Dev/deployment.yml'
-                    def deploymentFile = 'Dev/deployment.yml'
+                    sh 'chmod u+w Dev/app/deployment.yml'
+                    def deploymentFile = 'Dev/app/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
                     def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/lupitaap:v1.*', "jgraziano/lupitaap:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
@@ -53,7 +53,7 @@ pipeline {
                         sh 'git config --global user.email "jgraziano@example.com"'
                         sh 'git config --global user.name "jgraziano"'
                         sh 'git status'
-                        sh 'git add -v Dev/deployment.yml'
+                        sh 'git add -v Dev/app/deployment.yml'
                         sh 'git commit -v -m "Update deployment"'
                         sh 'git push origin main'
                     }
