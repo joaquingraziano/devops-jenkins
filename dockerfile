@@ -9,7 +9,7 @@ FROM nginx:latest
 # El primer parámetro 'main.py' es el nombre del archivo en el host.
 # El segundo parámetro '/' es la ruta donde poner el archivo en la imagen.
 # Aquí ponemos el archivo en la carpeta raíz de la imagen. 
-COPY index.html /var/www/html/index.html
+COPY index.html /usr/share/nginx/html/index.html 
 
 # Necesitamos definir el comando a lanzar cuando vayamos a ejecutar la imagen.
 # Utilizamos la palabra clave 'CMD' para hacerlo.
