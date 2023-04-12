@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "jgraziano/lupitaap"
+    registry = "jgraziano/webdemo"
     registryCredential = 'dockerhub_id'
     dockerImage = ''
   }
@@ -26,7 +26,7 @@ pipeline {
         echo 'Haciendo un Push a la registry de docker'
         script {
           docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
-          docker.image("jgraziano/lupitaap:v1.$BUILD_NUMBER").push()
+          docker.image("jgraziano/webdemo:v1.$BUILD_NUMBER").push()
           }
         }
       }
@@ -52,7 +52,7 @@ pipeline {
                         sh 'git config --global user.name "jgraziano"'
                         sh 'git status'
                         sh 'git add -v dev/app/deployment.yml'
-                        sh 'git commit -v -m "Update deployment"'
+                        sh 'git commit -a -m "Update deployment"'
                         sh 'git push origin main'
                     }
                 }
