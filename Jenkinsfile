@@ -44,7 +44,7 @@ pipeline {
                     sh 'chmod u+w dev/app/deployment.yml'
                     def deploymentFile = 'dev/app/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
-                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo::v1.*', "jgraziano/webdemo::v1.${"$BUILD_NUMBER"}")
+                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo:v1.*', "jgraziano/webdemo:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
                     // Pushea los cambios al repositorio
                     withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
