@@ -4,6 +4,10 @@ pipeline {
     registryCredential = 'dockerhub_id'
     dockerImage = ''
   }
+
+  arameters {
+    string(name: 'WORKPLACE', description: 'workplace environment')
+  }
   
   agent any
   stages {
