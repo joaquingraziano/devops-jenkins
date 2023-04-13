@@ -31,34 +31,44 @@ pipeline {
         }
       }
     }
-
+    //Finaliza Stage Push
+    //Inicia deploy manifiesto
     stage('Update Deployment') {
+      when {
+        expression {
+          def report = readJSON file: 'snyk_report.json'
+          return !report.vulnerabilities.any { it.severity == "high" }
+        }
+      }
       steps {
         script {
-                    // borra el directorio y lo vuelve a clonar
-                    //sh "rm argocd -R"
-                    sh "git clone https://github.com/joaquingraziano/argocd.git"
-                
-                dir('argocd/') {
-                    //modifica version en manifiesto
-                    sh 'chmod u+w prod/app/deployment.yml'
-                    def deploymentFile = 'prod/app/deployment.yml'
-                    def deploymentContent = readFile(deploymentFile)
-                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo:P1.*', "jgraziano/webdemo:P1.${"$BUILD_NUMBER"}")
-                    writeFile file: deploymentFile, text: updatedDeploymentContent
-                    // Pushea los cambios al repositorio
-                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
-                        sh 'git config --global user.email "jgraziano@example.com"'
-                        sh 'git config --global user.name "jgraziano"'
-                        sh 'git status'
-                        sh 'git add -v prod/app/deployment.yml'
-                        sh 'git commit -a -m "Update deployment"'
-                        sh 'git push origin main'
-                    }
-                }
-            }
+          // Clone GitHub repo
+          git branch: 'master', url: 'https://github.com/Jiolloker/manifest-eks'  
+          // Cambia el nombre del repo
+          // Update Deployment
+          sh "chmod u+w ${params.WORKPLACE}/app/deployment.yml"
+          def deploymentFile = "${params.WORKPLACE}/app/deployment.yml"
+          def deploymentContent = readFile(deploymentFile)
+          def updatedDeploymentContent = deploymentContent.replaceAll('fcambres/webdemo:v1.*', "fcambres/webdemo:v1.${"$BUILD_NUMBER"}")
+          writeFile file: deploymentFile, text: updatedDeploymentContent
+          sh "cat ${params.WORKPLACE}/app/deployment.yml"
+          // Push changes to GitHub
+          withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
+            sh """
+            git config --global user.email "jiolloker@example.com"
+            git config --global user.name "jiolloker"
+            git status
+            git add -v "${params.WORKPLACE}/app/deployment.yml"
+            git commit -v -m 'Update deployment of ${params.WORKPLACE} with build number v1.$BUILD_NUMBER'
+            git push origin master
+            """
+          }
         }
-    //Finaliza Stage Push
+      }
+
+
+
+    //Finaliza deploy manifiesto
   }
     }     
     post {
