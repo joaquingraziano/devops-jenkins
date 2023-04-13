@@ -38,12 +38,7 @@ pipeline {
     //Finaliza Stage Push
     //Inicia deploy manifiesto
     stage('Update Deployment') {
-      when {
-        expression {
-          def report = readJSON file: 'snyk_report.json'
-          return !report.vulnerabilities.any { it.severity == "high" }
-        }
-      }
+
       steps {
         script {
           // Clone GitHub repo
