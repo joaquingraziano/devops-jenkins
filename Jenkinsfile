@@ -37,7 +37,7 @@ pipeline {
       steps {
         script {
                     // borra el directorio y lo vuelve a clonar
-                    sh "rm argocd -R" || true
+                    sh "rm argocd -R || true"
                     sh "git clone https://github.com/joaquingraziano/argocd.git"
                 
                 dir('argocd/') {
