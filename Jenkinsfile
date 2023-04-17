@@ -65,7 +65,7 @@ pipeline {
       always {
         //limpia imagenes
           echo 'Se limpian las imagenes pusheadas'
-          sh "docker rmi $registry:t1.$BUILD_NUMBER"
+          sh "docker rmi $registry:v1.$BUILD_NUMBER"
           sh "docker rmi registry.hub.docker.com/$registry:v1.$BUILD_NUMBER"
       }
     }
