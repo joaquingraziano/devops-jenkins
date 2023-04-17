@@ -54,7 +54,7 @@ pipeline {
                         sh 'git status'
                         sh 'git add -v prod/app/deployment.yml'
                         sh 'git commit -a -m "Update deployment"'
-                        sh 'git push origin main'
+                        sh 'git push origin master'
                     }
                 }
             }
