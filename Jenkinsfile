@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    registry = "jgraziano/webdemo"
+    registry = "jgraziano/webdemo-test"
     registryCredential = 'dockerhub_id'
     dockerImage = ''
   }
@@ -14,7 +14,7 @@ pipeline {
         sh 'ls'
         echo 'Haciendo el Build de la app'
         script {
-          docker.build registry + ":T1.$BUILD_NUMBER"
+          docker.build registry + ":v1.$BUILD_NUMBER"
         }  
       }
     }
@@ -26,7 +26,7 @@ pipeline {
         echo 'Haciendo un Push a la registry de docker'
         script {
           docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
-          docker.image("jgraziano/webdemo:T1.$BUILD_NUMBER").push()
+          docker.image("jgraziano/webdemo-test:v1.$BUILD_NUMBER").push()
           }
         }
       }
@@ -44,7 +44,7 @@ pipeline {
                     sh 'chmod u+w staging/app/deployment.yml'
                     def deploymentFile = 'staging/app/deployment.yml'
                     def deploymentContent = readFile(deploymentFile)
-                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo:T1.*', "jgraziano/webdemo:T1.${"$BUILD_NUMBER"}")
+                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo-test:v1.*', "jgraziano/webdemo-test:v1.${"$BUILD_NUMBER"}")
                     writeFile file: deploymentFile, text: updatedDeploymentContent
                     // Pushea los cambios al repositorio
                     withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
@@ -65,8 +65,8 @@ pipeline {
       always {
         //limpia imagenes
           echo 'Se limpian las imagenes pusheadas'
-          sh "docker rmi $registry:T1.$BUILD_NUMBER"
-          sh "docker rmi registry.hub.docker.com/$registry:T1.$BUILD_NUMBER"
+          sh "docker rmi $registry:t1.$BUILD_NUMBER"
+          sh "docker rmi registry.hub.docker.com/$registry:t1.$BUILD_NUMBER"
       }
     }
   }
