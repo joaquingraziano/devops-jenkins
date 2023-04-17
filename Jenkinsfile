@@ -26,7 +26,7 @@ pipeline {
         echo 'Haciendo un Push a la registry de docker'
         script {
           docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
-          docker.image("jgraziano/webdemo-dev:1.$BUILD_NUMBER").push()
+          docker.image("jgraziano/webdemo-dev:v1.$BUILD_NUMBER").push()
           }
         }
       }
