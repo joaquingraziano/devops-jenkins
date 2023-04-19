@@ -9,7 +9,7 @@ pipeline {
   stages {
 //Inicia Stage Clona app
     stage('Clone APP') {
-      script {
+      steps {
         //Borra el directorio y lo vuelve a clonar
           sh "rm applicacion-webdemo -R || true"
           sh "git clone -b devhttps://github.com/joaquingraziano/aplicacion-webdemo.git"
