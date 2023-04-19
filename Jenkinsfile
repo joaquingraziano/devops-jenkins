@@ -4,11 +4,11 @@ pipeline {
     registryCredential = 'dockerhub_id'
     dockerImage = ''
   }
-  
+//Inician Stages  
   agent any
   stages {
 
-    //Inicia Stage Build
+//Inicia Stage Build
     stage('build Image') {
       steps {
         sh 'ls'
@@ -18,50 +18,8 @@ pipeline {
         }  
       }
     }
-    //Finaliza Stage Build
-/*
-    //Inicia Stage Push
-    stage('Push Image') {
-      steps {
-        echo 'Haciendo un Push a la registry de docker'
-        script {
-          docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
-          docker.image("jgraziano/webdemo-dev:v1.$BUILD_NUMBER").push()
-          }
-        }
-      }
-    }
-
-    stage('Update Deployment') {
-      steps {
-        script {
-                    // borra el directorio y lo vuelve a clonar
-                    sh "rm argocd -R || true"
-                    sh "git clone https://github.com/joaquingraziano/argocd.git"
-                
-                dir('argocd/') {
-                    //modifica version en manifiesto
-                    sh 'chmod u+w dev/app/deployment.yml'
-                    def deploymentFile = 'dev/app/deployment.yml'
-                    def deploymentContent = readFile(deploymentFile)
-                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo-dev:v1.*', "jgraziano/webdemo-dev:v1.${"$BUILD_NUMBER"}")
-                    writeFile file: deploymentFile, text: updatedDeploymentContent
-                    // Pushea los cambios al repositorio
-                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
-                        sh 'git config --global user.email "jgraziano@example.com"'
-                        sh 'git config --global user.name "jgraziano"'
-                        sh 'git status'
-                        sh 'git add -v dev/app/deployment.yml'
-                        sh 'git commit -a -m "Update deployment"'
-                        sh 'git push origin master'
-                    }
-                }
-            }
-        }
-    //Finaliza Stage Push
-  }*/
-
-// Agregado Stage Snyk Scan
+//Finaliza Stage Build
+//Inicia Stage Snyk Scan
     stage('Snyk Scan') {
       steps {
         withCredentials([string(credentialsId: 'snyktoken', variable: 'SNYK_TOKEN')]) {
@@ -70,7 +28,8 @@ pipeline {
         }
       }
     }
-        // Agregado Stage Snyk Issue
+//Finaliza Stage Snyk Scan
+//inicia Stage Snyk Issue
     stage('Snyk Issue') {
       steps {
         script {
@@ -85,9 +44,10 @@ pipeline {
         }
       }
     }
-    //finaliza snyk
- //Inicia Stage Push
+//Finaliza Stage Snyk Ussue
+//Inicia Stage Push Image
     stage('Push Image') {
+      //Condicion Snyk, nivel de serveridad
       when {
         expression {
           def report = readJSON file: 'snyk_report.json'
@@ -103,8 +63,10 @@ pipeline {
         }
       }
     }
-    //Finaliza Stage Push   
-        stage('Update Deployment') {
+//Finaliza Stage Push       
+//Inicia Stage Deployment - Actualiza version de imagen en manifiesto para ArgoCD
+    stage('Update Deployment') {
+      //Condicion Snyk, nivel de serveridad
       when {
         expression {
           def report = readJSON file: 'snyk_report.json'
@@ -112,35 +74,35 @@ pipeline {
         }
       }
 
-        steps {
-          script {
-                    // borra el directorio y lo vuelve a clonar
-                    sh "rm argocd -R || true"
-                    sh "git clone https://github.com/joaquingraziano/argocd.git"
+      steps {
+        script {
+        //Borra el directorio y lo vuelve a clonar
+          sh "rm argocd -R || true"
+          sh "git clone https://github.com/joaquingraziano/argocd.git"
                 
-                dir('argocd/') {
-                    //modifica version en manifiesto
-                    sh 'chmod u+w dev/app/deployment.yml'
-                    def deploymentFile = 'dev/app/deployment.yml'
-                    def deploymentContent = readFile(deploymentFile)
-                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo-dev:v1.*', "jgraziano/webdemo-dev:v1.${"$BUILD_NUMBER"}")
-                    writeFile file: deploymentFile, text: updatedDeploymentContent
-                    // Pushea los cambios al repositorio
-                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
-                        sh 'git config --global user.email "jgraziano@example.com"'
-                        sh 'git config --global user.name "jgraziano"'
-                        sh 'git status'
-                        sh 'git add -v dev/app/deployment.yml'
-                        sh 'git commit -a -m "Update deployment"'
-                        sh 'git push origin master'
-                    }
-                }
+          dir('argocd/') {
+          //modifica version en manifiesto
+            sh 'chmod u+w dev/app/deployment.yml'
+              def deploymentFile = 'dev/app/deployment.yml'
+              def deploymentContent = readFile(deploymentFile)
+              def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo-dev:v1.*', "jgraziano/webdemo-dev:v1.${"$BUILD_NUMBER"}")
+              writeFile file: deploymentFile, text: updatedDeploymentContent
+          // Pushea los cambios al repositorio
+            withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
+              sh 'git config --global user.email "jgraziano@example.com"'
+              sh 'git config --global user.name "jgraziano"'
+              sh 'git status'
+              sh 'git add -v dev/app/deployment.yml'
+              sh 'git commit -a -m "Update deployment"'
+              sh 'git push origin master'
             }
+          }
         }
-        }
-
-  //fin de stages
-    }    
+      }
+    }
+//Finaliza Stage Deployment
+  }    
+//Finaliza Stages
     post {
       always {
         //limpia imagenes
@@ -149,4 +111,4 @@ pipeline {
           sh "docker rmi registry.hub.docker.com/$registry:v1.$BUILD_NUMBER"
       }
     }
-  }
+}
