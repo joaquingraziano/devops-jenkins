@@ -104,8 +104,39 @@ pipeline {
       }
     }
     //Finaliza Stage Push   
+        stage('Update Deployment') {
+      when {
+        expression {
+          def report = readJSON file: 'snyk_report.json'
+          return !report.vulnerabilities.any { it.severity == "high" }
+        }
+      }
 
-
+        steps {
+          script {
+                    // borra el directorio y lo vuelve a clonar
+                    sh "rm argocd -R || true"
+                    sh "git clone https://github.com/joaquingraziano/argocd.git"
+                
+                dir('argocd/') {
+                    //modifica version en manifiesto
+                    sh 'chmod u+w dev/app/deployment.yml'
+                    def deploymentFile = 'dev/app/deployment.yml'
+                    def deploymentContent = readFile(deploymentFile)
+                    def updatedDeploymentContent = deploymentContent.replaceAll('jgraziano/webdemo-dev:v1.*', "jgraziano/webdemo-dev:v1.${"$BUILD_NUMBER"}")
+                    writeFile file: deploymentFile, text: updatedDeploymentContent
+                    // Pushea los cambios al repositorio
+                    withCredentials([gitUsernamePassword(credentialsId: 'github_id', gitToolName: 'git-tool')]){
+                        sh 'git config --global user.email "jgraziano@example.com"'
+                        sh 'git config --global user.name "jgraziano"'
+                        sh 'git status'
+                        sh 'git add -v dev/app/deployment.yml'
+                        sh 'git commit -a -m "Update deployment"'
+                        sh 'git push origin master'
+                    }
+                }
+            }
+        }
 
 
   //fin de stages
