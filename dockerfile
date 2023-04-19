@@ -2,7 +2,7 @@
 # Utilizamos la palabra clave 'FROM' para hacerlo.
 # En nuestro ejemplo, queremos importar la imagen de python.
 # Así que escribimos 'python' para el nombre de la imagen y 'latest' para la versión.
-FROM nginx:latest
+FROM nginx:stable-bullseye
 
 # Para lanzar nuestro código python, debemos importarlo a nuestra imagen.
 # Utilizamos la palabra clave 'COPY' para hacerlo.
