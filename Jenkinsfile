@@ -85,7 +85,25 @@ pipeline {
         }
       }
     }
-    
+    //finaliza snyk
+ //Inicia Stage Push
+    stage('Push Image') {
+      when {
+        expression {
+          def report = readJSON file: 'snyk_report.json'
+          return !report.vulnerabilities.any { it.severity == "high" }
+        }
+      }
+      steps {
+        echo 'Haciendo un Push a la registry de docker'
+        script {
+          docker.withRegistry('https://registry.hub.docker.com/', 'dockerhub_id') {
+          docker.image("jgraziano/webdemo-dev:v1.$BUILD_NUMBER").push()
+          }
+        }
+      }
+    }
+    //Finaliza Stage Push   
 
 
 
