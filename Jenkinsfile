@@ -60,6 +60,21 @@ pipeline {
         }
     //Finaliza Stage Push
   }*/
+
+// Agregado Stage Snyk Scan
+    stage('Snyk Scan') {
+      steps {
+        withCredentials([string(credentialsId: 'snyktoken', variable: 'SNYK_TOKEN')]) {
+        sh 'snyk auth $SNYK_TOKEN'
+        sh "snyk container test $registry:v1.$BUILD_NUMBER --json --severity-threshold=high > snyk_report.json || true"
+        }
+      }
+    }
+
+
+
+
+  //fin de stages
     }    
     post {
       always {
