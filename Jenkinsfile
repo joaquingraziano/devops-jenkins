@@ -59,8 +59,8 @@ pipeline {
             }
         }
     //Finaliza Stage Push
-  }
-    } */    
+  }*/
+    }    
     post {
       always {
         //limpia imagenes
