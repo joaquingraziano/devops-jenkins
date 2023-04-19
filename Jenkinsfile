@@ -19,7 +19,7 @@ pipeline {
       }
     }
     //Finaliza Stage Build
-
+/*
     //Inicia Stage Push
     stage('Push Image') {
       steps {
@@ -60,7 +60,7 @@ pipeline {
         }
     //Finaliza Stage Push
   }
-    }     
+    } */    
     post {
       always {
         //limpia imagenes
