@@ -7,15 +7,25 @@ pipeline {
 //Inician Stages  
   agent any
   stages {
-
+//Inicia Stage Clona app
+    stage('Clone APP') {
+      script {
+        //Borra el directorio y lo vuelve a clonar
+          sh "rm applicacion-webdemo -R || true"
+          sh "git clone -b devhttps://github.com/joaquingraziano/aplicacion-webdemo.git"
+      }
+    }
+//Finaliza Stage Clona app
 //Inicia Stage Build
     stage('build Image') {
       steps {
-        sh 'ls'
-        echo 'Haciendo el Build de la app'
-        script {
-          docker.build registry + ":v1.$BUILD_NUMBER"
-        }  
+        dir('aplicacion-webdemo/'){
+          sh 'ls'
+          echo 'Haciendo el Build de la app'
+          script {
+            docker.build registry + ":v1.$BUILD_NUMBER"
+          }  
+        }
       }
     }
 //Finaliza Stage Build
