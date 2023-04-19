@@ -70,6 +70,22 @@ pipeline {
         }
       }
     }
+        // Agregado Stage Snyk Issue
+    stage('Snyk Issue') {
+      steps {
+        script {
+          def report = readJSON file: 'snyk_report.json'
+          report.vulnerabilities.each { vuln ->
+            def issueTitle = "Snyk Issue: ${vuln.id}"
+            def issueDescription = "Vulnerabilidad encontrada: ${vuln.id}"
+            withCredentials([string(credentialsId: 'token-github', variable: 'GITHUB_TOKEN')]) {
+              sh "curl -X POST -H 'Content-Type: application/json' -H 'Authorization: token ${GITHUB_TOKEN}' -d '{\"title\":\"${issueTitle}\", \"body\":\"${issueDescription}\", \"labels\":[\"Seguridad\"]}' https://api.github.com/repos/Jiolloker/webdemo/issues"
+            }
+          }
+        }
+      }
+    }
+    
 
 
 
