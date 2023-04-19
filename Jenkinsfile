@@ -137,7 +137,7 @@ pipeline {
                 }
             }
         }
-
+        }
 
   //fin de stages
     }    
