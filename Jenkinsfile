@@ -12,7 +12,7 @@ pipeline {
       steps {
         //Borra el directorio y lo vuelve a clonar
           sh "rm applicacion-webdemo -R || true"
-          sh "git clone -b devhttps://github.com/joaquingraziano/aplicacion-webdemo.git"
+          sh "git clone -b dev https://github.com/joaquingraziano/aplicacion-webdemo.git"
       }
     }
 //Finaliza Stage Clona app
